@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WPS Listener — Login</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        .login-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            padding: 20px;
+        }
+        .login-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            width: 100%;
+            max-width: 360px;
+        }
+        .login-brand {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .login-brand span {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 3px;
+        }
+        .login-brand div {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+        .login-err {
+            display: none;
+            background: rgba(255,82,82,0.12);
+            border: 1px solid var(--danger);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            color: var(--danger);
+            margin-bottom: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrap">
+        <div class="login-box">
+            <div class="login-brand">
+                <span>WPS</span>
+                <div>WPS Credential Interceptor</div>
+            </div>
+            <div class="login-err" id="login-err"></div>
+            <form id="login-form" onsubmit="doLogin(event)">
+                <label>Password</label>
+                <input type="password" id="login-pass" required autofocus placeholder="Enter password">
+                <div class="btn-group" style="margin-top:18px">
+                    <button type="submit" class="btn btn-primary" id="login-btn" style="width:100%">LOGIN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+    async function doLogin(e) {
+        e.preventDefault();
+        const btn = document.getElementById('login-btn');
+        const err = document.getElementById('login-err');
+        const pass = document.getElementById('login-pass').value;
+
+        btn.disabled = true;
+        btn.innerText = 'LOGGING IN...';
+        err.style.display = 'none';
+
+        try {
+            const resp = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass })
+            });
+
+            if (resp.ok) {
+                window.location.href = '/';
+            } else {
+                const d = await resp.json().catch(() => ({}));
+                err.innerText = d.message || 'Wrong password';
+                err.style.display = '';
+                document.getElementById('login-pass').select();
+            }
+        } catch(ex) {
+            err.innerText = 'Connection error';
+            err.style.display = '';
+        }
+
+        btn.disabled = false;
+        btn.innerText = 'LOGIN';
+    }
+    </script>
+</body>
+</html>

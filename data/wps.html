@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WPS Listener</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        .saved-wifi-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 6px;
+        }
+        .saved-wifi-info { flex: 1; min-width: 0; }
+        .saved-wifi-ssid {
+            font-size: 0.95rem;
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .saved-wifi-bssid {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-family: monospace;
+        }
+        .saved-wifi-pass {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .saved-wifi-pass-text {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: var(--muted);
+            min-width: 70px;
+            text-align: right;
+        }
+        .saved-wifi-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .saved-wifi-btn {
+            padding: 4px 8px !important;
+            font-size: 0.85rem !important;
+            min-width: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="sidebar-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
+    <main class="main">
+        <div class="main-hdr">
+            <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+            <h1 id="page-title">WPS Listener</h1>
+            <div class="hdr-status"><span id="conn-text">Offline</span></div>
+        </div>
+        <div class="content">
+
+            <!-- Listen Any Network -->
+            <div class="card">
+                <h3 style="color:var(--amber)">Listen Any Network</h3>
+                <div style="font-size:0.85rem;color:var(--muted);margin-bottom:10px">Listen for ANY WPS button press nearby. Press the WPS button on any router to capture its credentials.</div>
+                <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:12px">
+                    <div style="flex:1">
+                        <label>Timeout</label>
+                        <select id="wps-timeout">
+                            <option value="900">15 min</option>
+                            <option value="1800">30 min</option>
+                            <option value="3600" selected>1 hour</option>
+                            <option value="7200">2 hours</option>
+                            <option value="14400">4 hours</option>
+                            <option value="0">No limit</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-amber" id="btn-wps-start" onclick="wpsStart()">START</button>
+                    <button class="btn btn-danger" id="btn-wps-stop" onclick="wpsStop()" style="display:none">STOP</button>
+                </div>
+
+                <!-- Status -->
+                <div id="wps-status-box" style="display:none;padding:10px;background:#111;border:1px solid var(--border);border-radius:6px;margin-bottom:10px">
+                    <div id="wps-state" style="font-size:0.85rem;font-weight:700"></div>
+                    <div id="wps-elapsed" style="font-size:0.85rem;color:var(--muted);margin-top:4px"></div>
+                </div>
+
+                <!-- Captured credentials -->
+                <div id="wps-result" style="display:none;padding:12px;background:#0a1a0a;border:1px solid var(--accent);border-radius:6px">
+                    <div style="font-size:0.85rem;color:var(--accent);font-weight:700;margin-bottom:8px">CREDENTIALS CAPTURED</div>
+                    <div style="font-family:monospace;font-size:0.9rem">
+                        <div>SSID: <span id="wps-cap-ssid" style="color:#fff;font-weight:700"></span></div>
+                        <div>PASS: <span id="wps-cap-pass" style="color:var(--accent);font-weight:700"></span></div>
+                        <div>BSSID: <span id="wps-cap-bssid" style="color:var(--muted)"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saved Passwords -->
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                    <div style="display:flex;align-items:center;gap:8px">
+                        <h3 style="margin-bottom:0">Saved Passwords</h3>
+                        <span class="pill" id="saved-wifi-count">0</span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="loadSavedWifi()" style="padding:5px 14px;font-size:0.85rem">REFRESH</button>
+                </div>
+                <div id="saved-wifi-list"></div>
+            </div>
+
+            <!-- WPS Log -->
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                    <h3 style="margin-bottom:0">Log</h3>
+                    <button class="btn btn-secondary" onclick="clearWpsLog()" style="padding:3px 10px;font-size:0.9rem">CLEAR</button>
+                </div>
+                <div id="wps-log" class="log-box"></div>
+            </div>
+
+        </div>
+    </main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/common.js"></script>
+<script src="/js/wps.js"></script>
+<script>initApp('wps', 'WPS Listener');</script>
+</body>
+</html>

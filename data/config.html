@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FANG — Config</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+<div class="wrapper">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="sidebar-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
+    <main class="main">
+        <div class="main-hdr">
+            <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+            <h1 id="page-title">Configuration</h1>
+            <div class="hdr-status"><span id="conn-text">Offline</span></div>
+        </div>
+        <div class="content">
+            <div class="card">
+                <h3>Web Password</h3>
+                <form id="webpass-form" onsubmit="saveWebPass(event)">
+                    <label>Password (min 4 chars)</label>
+                    <input type="password" id="web-pass" minlength="4" maxlength="63" placeholder="New web password">
+                    <div class="btn-group"><button type="submit" class="btn btn-primary">CHANGE</button></div>
+                </form>
+            </div>
+            <div class="card">
+                <h3>WiFi Station</h3>
+                <form id="sta-form" onsubmit="saveStaSettings(event)">
+                    <label>SSID</label>
+                    <input type="text" id="sta-ssid" maxlength="31" placeholder="Your home WiFi">
+                    <label>Password</label>
+                    <input type="password" id="sta-pass" maxlength="63" placeholder="Password">
+                    <div id="sta-info" style="margin-top:8px;font-size:0.85rem;color:var(--muted)">Not configured</div>
+                    <div class="btn-group"><button type="submit" class="btn btn-primary">SAVE</button></div>
+                </form>
+            </div>
+            <div class="card">
+                <h3>Access Point</h3>
+                <form id="ap-form" onsubmit="saveSettings(event)">
+                    <label>SSID</label>
+                    <input type="text" id="cfg-ssid" required maxlength="31">
+                    <label>Password</label>
+                    <input type="text" id="cfg-pass" required minlength="8" maxlength="63">
+                    <label>Channel (1-13)</label>
+                    <input type="number" id="cfg-channel" min="1" max="13" value="1">
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">SAVE</button>
+                        <button type="button" class="btn btn-secondary" onclick="rebootDevice()">REBOOT</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/js/common.js"></script>
+<script src="/js/config.js"></script>
+<script>initApp('config', 'Configuration');</script>
+</body>
+</html>
