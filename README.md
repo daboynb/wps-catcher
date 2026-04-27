@@ -31,6 +31,6 @@ Requirements: [PlatformIO Core](https://platformio.org/install/cli) installed.
 
 1. Power the board.
 2. Connect your phone to the `ESP32-Tool` Wi-Fi (default password: `esp32tool!`).
-3. Login page opens by itself. Default web password: `esp32tool!`.
+3. Login page opens by itself (if not go to http://192.168.4.1). Default web password: `esp32tool!`.
 4. Pick a timeout, hit **Start**, wait for a WPS button press on a nearby router.
 5. On capture, SSID + password + BSSID show up on screen and are stored on the board.
